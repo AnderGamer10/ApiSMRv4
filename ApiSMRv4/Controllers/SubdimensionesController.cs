@@ -12,47 +12,47 @@ namespace ApiSMRv4.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PreguntasController : ControllerBase
+    public class SubdimensionesController : ControllerBase
     {
         private readonly ApiSMRv4Context _context;
 
-        public PreguntasController(ApiSMRv4Context context)
+        public SubdimensionesController(ApiSMRv4Context context)
         {
             _context = context;
         }
 
-        // GET: api/Preguntas
+        // GET: api/Subdimensiones
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Preguntas>>> GetPreguntas()
+        public async Task<ActionResult<IEnumerable<Subdimensiones>>> GetSubdimensiones()
         {
-            return await _context.Preguntas.ToListAsync();
+            return await _context.Subdimensiones.ToListAsync();
         }
 
-
-        [HttpGet("{Subdimension}")]
-        public ActionResult<List<Preguntas>> GetPreguntaInfo(string Subdimension)
+        // GET: api/Subdimensiones/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Subdimensiones>> GetSubdimensiones(string id)
         {
-            var pregunta = _context.Preguntas.Where(sub => sub.Subdimension.Equals(Subdimension)).ToList();
+            var subdimensiones = await _context.Subdimensiones.FindAsync(id);
 
-            if (pregunta == null)
+            if (subdimensiones == null)
             {
                 return NotFound();
             }
 
-            return pregunta;
+            return subdimensiones;
         }
 
-        // PUT: api/Preguntas/5
+        // PUT: api/Subdimensiones/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPreguntas(string id, Preguntas preguntas)
+        public async Task<IActionResult> PutSubdimensiones(string id, Subdimensiones subdimensiones)
         {
-            if (id != preguntas.PreguntaId)
+            if (id != subdimensiones.Subdimension)
             {
                 return BadRequest();
             }
 
-            _context.Entry(preguntas).State = EntityState.Modified;
+            _context.Entry(subdimensiones).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +60,7 @@ namespace ApiSMRv4.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PreguntasExists(id))
+                if (!SubdimensionesExists(id))
                 {
                     return NotFound();
                 }
@@ -73,19 +73,19 @@ namespace ApiSMRv4.Controllers
             return NoContent();
         }
 
-        // POST: api/Preguntas
+        // POST: api/Subdimensiones
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Preguntas>> PostPreguntas(Preguntas preguntas)
+        public async Task<ActionResult<Subdimensiones>> PostSubdimensiones(Subdimensiones subdimensiones)
         {
-            _context.Preguntas.Add(preguntas);
+            _context.Subdimensiones.Add(subdimensiones);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (PreguntasExists(preguntas.PreguntaId))
+                if (SubdimensionesExists(subdimensiones.Subdimension))
                 {
                     return Conflict();
                 }
@@ -95,28 +95,28 @@ namespace ApiSMRv4.Controllers
                 }
             }
 
-            return CreatedAtAction("GetPreguntas", new { id = preguntas.PreguntaId }, preguntas);
+            return CreatedAtAction("GetSubdimensiones", new { id = subdimensiones.Subdimension }, subdimensiones);
         }
 
-        // DELETE: api/Preguntas/5
+        // DELETE: api/Subdimensiones/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePreguntas(string id)
+        public async Task<IActionResult> DeleteSubdimensiones(string id)
         {
-            var preguntas = await _context.Preguntas.FindAsync(id);
-            if (preguntas == null)
+            var subdimensiones = await _context.Subdimensiones.FindAsync(id);
+            if (subdimensiones == null)
             {
                 return NotFound();
             }
 
-            _context.Preguntas.Remove(preguntas);
+            _context.Subdimensiones.Remove(subdimensiones);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool PreguntasExists(string id)
+        private bool SubdimensionesExists(string id)
         {
-            return _context.Preguntas.Any(e => e.PreguntaId == id);
+            return _context.Subdimensiones.Any(e => e.Subdimension == id);
         }
     }
 }

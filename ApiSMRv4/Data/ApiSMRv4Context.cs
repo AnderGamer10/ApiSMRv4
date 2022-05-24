@@ -23,5 +23,7 @@ namespace ApiSMRv4.Data
         public DbSet<ApiSMRv4.Models.PreguntasTabla> PreguntasTabla { get; set; }
 
         public DbSet<ApiSMRv4.Models.Respuestas> Respuestas { get; set; }
+        public DbSet<ApiSMRv4.Models.Subdimensiones> Subdimensiones { get; set; }
+        public DbSet<ApiSMRv4.Models.Maturity_levels> Maturity_levels { get; set; }
     }
 }

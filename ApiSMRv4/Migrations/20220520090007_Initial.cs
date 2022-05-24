@@ -2,7 +2,7 @@
 
 namespace ApiSMRv4.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -21,6 +21,20 @@ namespace ApiSMRv4.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Maturity_levels",
+                columns: table => new
+                {
+                    NombreLevel = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Subdimension = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaxPregunta = table.Column<int>(type: "int", nullable: false),
+                    valor = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Maturity_levels", x => x.NombreLevel);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Preguntas",
                 columns: table => new
                 {
@@ -35,15 +49,31 @@ namespace ApiSMRv4.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Elementos",
+                name: "Subdimensiones",
                 columns: table => new
                 {
-                    Elemento = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    IdPregunta = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Subdimension = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Dimension = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Elementos", x => x.Elemento);
+                    table.PrimaryKey("PK_Subdimensiones", x => x.Subdimension);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Elementos",
+                columns: table => new
+                {
+                    ElementoId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdPregunta = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    tipoPregunta = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Elemento = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Valor = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Elementos", x => x.ElementoId);
                     table.ForeignKey(
                         name: "FK_Elementos_Preguntas_IdPregunta",
                         column: x => x.IdPregunta,
@@ -56,12 +86,15 @@ namespace ApiSMRv4.Migrations
                 name: "PreguntasTabla",
                 columns: table => new
                 {
-                    ElementoPregunta = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    IdPregunta = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    PreguntasTablaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdPregunta = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ElementoPregunta = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Valor = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PreguntasTabla", x => x.ElementoPregunta);
+                    table.PrimaryKey("PK_PreguntasTabla", x => x.PreguntasTablaId);
                     table.ForeignKey(
                         name: "FK_PreguntasTabla_Preguntas_IdPregunta",
                         column: x => x.IdPregunta,
@@ -126,10 +159,16 @@ namespace ApiSMRv4.Migrations
                 name: "Elementos");
 
             migrationBuilder.DropTable(
+                name: "Maturity_levels");
+
+            migrationBuilder.DropTable(
                 name: "PreguntasTabla");
 
             migrationBuilder.DropTable(
                 name: "Respuestas");
+
+            migrationBuilder.DropTable(
+                name: "Subdimensiones");
 
             migrationBuilder.DropTable(
                 name: "Clientes");

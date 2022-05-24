@@ -9,15 +9,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiSMRv4.Migrations
 {
     [DbContext(typeof(ApiSMRv4Context))]
-    [Migration("20220406064131_initial")]
-    partial class initial
+    [Migration("20220520090007_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.15")
+                .HasAnnotation("ProductVersion", "5.0.16")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("ApiSMRv4.Models.Clientes", b =>
@@ -41,18 +41,48 @@ namespace ApiSMRv4.Migrations
 
             modelBuilder.Entity("ApiSMRv4.Models.Elementos", b =>
                 {
+                    b.Property<int>("ElementoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
                     b.Property<string>("Elemento")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IdPregunta")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Elemento");
+                    b.Property<int>("Valor")
+                        .HasColumnType("int");
+
+                    b.Property<string>("tipoPregunta")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ElementoId");
 
                     b.HasIndex("IdPregunta");
 
                     b.ToTable("Elementos");
+                });
+
+            modelBuilder.Entity("ApiSMRv4.Models.Maturity_levels", b =>
+                {
+                    b.Property<string>("NombreLevel")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("MaxPregunta")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Subdimension")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("valor")
+                        .HasColumnType("int");
+
+                    b.HasKey("NombreLevel");
+
+                    b.ToTable("Maturity_levels");
                 });
 
             modelBuilder.Entity("ApiSMRv4.Models.Preguntas", b =>
@@ -77,14 +107,22 @@ namespace ApiSMRv4.Migrations
 
             modelBuilder.Entity("ApiSMRv4.Models.PreguntasTabla", b =>
                 {
+                    b.Property<int>("PreguntasTablaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
                     b.Property<string>("ElementoPregunta")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IdPregunta")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("ElementoPregunta");
+                    b.Property<int>("Valor")
+                        .HasColumnType("int");
+
+                    b.HasKey("PreguntasTablaId");
 
                     b.HasIndex("IdPregunta");
 
@@ -122,6 +160,19 @@ namespace ApiSMRv4.Migrations
                     b.HasIndex("IdPregunta");
 
                     b.ToTable("Respuestas");
+                });
+
+            modelBuilder.Entity("ApiSMRv4.Models.Subdimensiones", b =>
+                {
+                    b.Property<string>("Subdimension")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Dimension")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Subdimension");
+
+                    b.ToTable("Subdimensiones");
                 });
 
             modelBuilder.Entity("ApiSMRv4.Models.Elementos", b =>
