@@ -42,6 +42,19 @@ namespace ApiSMRv4.Controllers
             return respuestas;
         }
 
+        [HttpGet("{idpregunta}/{año}")]
+        public ActionResult<List<Respuestas>> GetMaturity_levels(string idpregunta, int año)
+        {
+            var sub = _context.Respuestas.Where(u => u.IdPregunta.Equals(idpregunta) && u.Año.Equals(año)).ToList();
+
+            if (sub == null)
+            {
+                return NotFound();
+            }
+            return sub;
+        }
+
+
         // PUT: api/Respuestas/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

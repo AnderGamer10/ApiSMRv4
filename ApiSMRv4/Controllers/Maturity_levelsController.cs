@@ -28,12 +28,25 @@ namespace ApiSMRv4.Controllers
             return await _context.Maturity_levels.ToListAsync();
         }
 
-        // GET: api/Maturity_levels/L1
+        // GET: api/Maturity_levels/L1/Donostia
 
         [HttpGet("{subdimension}/{ciudad}")]
         public ActionResult<List<Maturity_levels>> GetMaturity_levels(string subdimension, string ciudad)
         {
             var sub = _context.Maturity_levels.Where(u => u.Subdimension.Equals(subdimension) && u.ciudad.Equals(ciudad)).ToList();
+
+            if (sub == null)
+            {
+                return NotFound();
+            }
+            return sub;
+        }
+
+        // GET: api/Maturity_levels/byLevel/C1A1/Donostia
+        [HttpGet("byLevel/{nombreLevel}/{ciudad}")]
+        public ActionResult<List<Maturity_levels>> GetMaturity_levelsByLevel(string nombreLevel, string ciudad)
+        {
+            var sub = _context.Maturity_levels.Where(u => u.NombreLevel.Equals(nombreLevel) && u.ciudad.Equals(ciudad)).ToList();
 
             if (sub == null)
             {
